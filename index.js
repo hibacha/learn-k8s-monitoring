@@ -34,20 +34,16 @@ var startWorker = function() {
   })
 
   app.get('/doWork', function(req, res) {
-    var deserializeWork = nextNumber(300000, 500000);
-    var downstreamDelay = nextNumber(100, 200);
-    var serializeWork = nextNumber(300000, 500000);
 
-    spin(deserializeWork);
-    sleep(downstreamDelay);
-    spin(serializeWork);
+    spin(nextNumber(50000, 75000));
+    sleep(10);
+    spin(nextNumber(50000, 75000));
+    sleep(10);
+    spin(nextNumber(50000, 75000));
+    sleep(10);
+    spin(nextNumber(50000, 75000));
 
-    res.send(
-      'Ended after:' +
-      ' deserializeWork: ' + deserializeWork +
-      ', downstreamDelay: ' + downstreamDelay +
-      ', serializeWork: ' + serializeWork
-    )
+    res.send('did work')
   })
 
   app.listen(8080, function () {

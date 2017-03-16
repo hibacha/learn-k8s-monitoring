@@ -22,14 +22,17 @@ spec:
       - name: meetmon
         image: {{ PUBLISH_TAG }}
         imagePullPolicy: Always
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          periodSeconds: 1
-          timeoutSeconds: 1
-          failureThreshold: 3
-          successThreshold: 1
+        # resources:
+        #   limits:
+        #     cpu: 500m
+        # readinessProbe:
+        #   httpGet:
+        #     path: /healthz
+        #     port: 8080
+        #   periodSeconds: 1
+        #   timeoutSeconds: 1
+        #   failureThreshold: 3
+        #   successThreshold: 1
       # - name: esp
       #   image: meetup/endpoints-runtime:1-0.0.1
       #   imagePullPolicy: Always
