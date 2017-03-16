@@ -89,5 +89,5 @@ prep: ## Verify dependencies are installed for course.
 	@echo
 	@siege --version || (echo; echo "Siege not found, check PREP.md for install details."; echo; false)
 	@echo
-	@echo "=== You're ready for Kubernetes 201!"
+	@echo "=== You're ready for this course!"
 	@echo

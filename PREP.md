@@ -2,14 +2,16 @@
 
 ## Dependencies to install before course
 
-### Kuberentes 101 dependencies
+### Kuberentes previous course dependencies
 
-Assuming you already participated in 101, you should already have
-the following:
+Assuming you already participated in other Kubernetes
+courses, you should already have the following:
 
 * gcloud SDK
 * kubectl
 * Docker
+
+## Dependencies new to this course
 
 ### Install envtpl
 
@@ -30,15 +32,6 @@ Ubuntu: sudo apt-get install siege
 clone it.
 
 ## Validate it all.
-
-For validation let's point ourselves to the training-sandbox:
-
-```bash
-$ gcloud container clusters get-credentials \
-  --project meetup-dev \
-  --zone us-east1-b \
-  training-sandbox
-```
 
 In the cloned repo run `make prep`.  If it succeeds you're ready.
 Resolve the missing dependency for any failures.
