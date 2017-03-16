@@ -1,9 +1,9 @@
 swagger: "2.0"
 info:
   description: "A cloud endpoint for our application"
-  title: "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog"
+  title: "{{ ENDPOINT_NAME }}"
   version: "0.1"
-host: "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog"
+host: "{{ ENDPOINT_NAME }}"
 paths:
   /doWork:
     get:

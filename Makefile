@@ -2,17 +2,17 @@ SHELL = bash
 
 CI_BUILD_NUMBER ?= $(USER)-snapshot
 VERSION ?= $(CI_BUILD_NUMBER)
+DATE=$(shell date +%Y-%m-%dT%H_%M_%S)
 
 PUBLISH_TAG := "mup.cr/training/meetmon:$(VERSION)"
 
 CLUSTER ?= training-sandbox
 ZONE ?= us-east1-b
 PROJECT ?= meetup-dev
-
-DATE=$(shell date +%Y-%m-%dT%H_%M_%S)
-ENDPOINT_REVISION=2017-03-15r0
-
 NAMESPACE ?= $(USER)
+
+ENDPOINT_REVISION=invalid
+ENDPOINT_NAME=meetmon-$(NAMESPACE).endpoints.$(PROJECT).cloud.goog
 
 help:
 	@echo Public targets:
@@ -31,14 +31,21 @@ __component-test: ## Run component-test only.
 publish: package ## Invokes package & component-test, then pushes to registry.
 	docker push $(PUBLISH_TAG)
 
-deploy-endpoint:
+deploy-endpoint: ## Deploys the OpenAPI def to gcloud svc management.
 	@mkdir -p target
-	@NAMESPACE=$(NAMESPACE) \
-		PROJECT=$(PROJECT) \
+	@ENDPOINT_NAME=$(ENDPOINT_NAME) \
 		envtpl < infra/openapi.yaml > target/openapi.yaml
 	gcloud service-management deploy --project $(PROJECT) target/openapi.yaml
 
-deploy: ## Deploy project to existing kubectl context.
+latest-revision: ## Prints latest gcloud svc revision
+	@gcloud service-management --project meetup-dev describe $(ENDPOINT_NAME) | grep id: | awk '{print $$2}'
+
+__set-revision: ## Retrieves latest rev from google and sets to internal var.
+	$(eval ENDPOINT_REVISION=$(shell make latest-revision))
+
+deploy: __set-revision ## Deploy project to existing kubectl context.
+# Make sure the endpoint was set to something proper.
+	@[ "$(ENDPOINT_REVISION)" != "" ] && [ "$(ENDPOINT_REVISION)" != "invalid" ]
 	@NAMESPACE=$(NAMESPACE) \
 		envtpl < infra/ns.yaml | kubectl apply -f -
 	@NAMESPACE=$(NAMESPACE) \
@@ -48,6 +55,7 @@ deploy: ## Deploy project to existing kubectl context.
 		DATE=$(DATE) \
 		PROJECT=$(PROJECT) \
 		ENDPOINT_REVISION=$(ENDPOINT_REVISION) \
+	  ENDPOINT_NAME=$(ENDPOINT_NAME) \
 		envtpl < infra/meetmon-dply.yaml | kubectl apply -f -
 
 publish-tag: ## Display the build's publishing tag.

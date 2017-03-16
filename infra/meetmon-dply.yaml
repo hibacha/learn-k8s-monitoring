@@ -33,12 +33,12 @@ spec:
         #   timeoutSeconds: 1
         #   failureThreshold: 3
         #   successThreshold: 1
-      # - name: esp
-      #   image: meetup/endpoints-runtime:1-0.0.1
-      #   imagePullPolicy: Always
-      #   args: [
-      #     "-p", "8081",
-      #     "-a", "127.0.0.1:8080",
-      #     "-s", "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog",
-      #     "-v", "{{ ENDPOINT_REVISION }}",
-      #   ]
+      - name: esp
+        image: meetup/endpoints-runtime:1-0.0.1
+        imagePullPolicy: Always
+        args: [
+          "-p", "8081",
+          "-a", "127.0.0.1:8080",
+          "-s", "{{ ENDPOINT_NAME }}",
+          "-v", "{{ ENDPOINT_REVISION }}",
+        ]
