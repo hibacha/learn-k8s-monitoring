@@ -44,8 +44,6 @@ var startWorker = function() {
     spin(nextNumber(50000, 75000));
     sleep(10);
     spin(nextNumber(50000, 75000));
-    sleep(10);
-    spin(nextNumber(50000, 75000));
 
     res.send('did work')
   })

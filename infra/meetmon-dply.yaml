@@ -8,6 +8,7 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 3
+      maxUnavailable: 1
   revisionHistoryLimit: 5
   selector:
       matchLabels:
