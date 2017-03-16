@@ -5,16 +5,13 @@ const sleep = require('system-sleep');
 const express = require('express');
 const throng = require('throng');
 
-// fake some startup time.
-sleep(3000);
-
 var startWorker = function() {
   var app = express()
 
-  var spin = function(timeInMs) {
+  var spin = function(count) {
     var start = new Date();
     var i = 0;
-    while(new Date().getTime() < start.getTime() + timeInMs) { // SYNC!
+    while(i < count) {
        i++;
     }
   }
@@ -37,26 +34,19 @@ var startWorker = function() {
   })
 
   app.get('/doWork', function(req, res) {
-    var deserializeDelay = nextNumber(10, 100);
+    var deserializeWork = nextNumber(300000, 500000);
     var downstreamDelay = nextNumber(100, 200);
-    var serializeDelay = nextNumber(10, 100);
+    var serializeWork = nextNumber(300000, 500000);
 
-    spin(deserializeDelay);
-
-    if(downstreamDelay >= 199) {
-      // LUUUCKY.
-      sleep(60 * 1000);
-    } else {
-      sleep(downstreamDelay);
-    }
-
-    spin(serializeDelay);
+    spin(deserializeWork);
+    sleep(downstreamDelay);
+    spin(serializeWork);
 
     res.send(
       'Ended after:' +
-      ' deserializeDelay: ' + deserializeDelay +
+      ' deserializeWork: ' + deserializeWork +
       ', downstreamDelay: ' + downstreamDelay +
-      ', serializeDelay: ' + serializeDelay
+      ', serializeWork: ' + serializeWork
     )
   })
 
@@ -66,6 +56,6 @@ var startWorker = function() {
 }
 
 throng({
-  workers: 5,       // Number of workers (cpu count)
-  start: startWorker    // Function to call when starting the worker processes
+  workers: 4, // Number of workers (cpu count)
+  start: startWorker // Function to call when starting the worker processes
 });
