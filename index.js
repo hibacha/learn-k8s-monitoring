@@ -33,6 +33,10 @@ var startWorker = function() {
     res.status(500).send('Internal Server Error')
   })
 
+  app.get('/doSecret', function(req, res) {
+    res.send('Nooo you shouldn\'t see me!')
+  })
+
   app.get('/doWork', function(req, res) {
 
     spin(nextNumber(50000, 75000));

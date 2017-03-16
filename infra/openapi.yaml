@@ -4,6 +4,11 @@ info:
   title: "{{ ENDPOINT_NAME }}"
   version: "0.1"
 host: "{{ ENDPOINT_NAME }}"
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: query
 paths:
   /doWork:
     get:
@@ -22,6 +27,21 @@ paths:
     get:
       operationId: doFail
       description: Will always fail
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: string
+        default:
+          description: Unexpected error
+          schema:
+            type: string
+  /doSecret:
+    get:
+      operationId: doSecret
+      description: Will always fail
+      security:
+      - api_key: []
       responses:
         200:
           description: Successful response
