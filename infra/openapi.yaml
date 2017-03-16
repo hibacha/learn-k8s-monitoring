@@ -1,0 +1,33 @@
+swagger: "2.0"
+info:
+  description: "A cloud endpoint for our application"
+  title: "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog"
+  version: "0.1"
+host: "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog"
+paths:
+  /doWork:
+    get:
+      operationId: doWork
+      description: Fakes some processing.
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: string
+        default:
+          description: Unexpected error
+          schema:
+            type: string
+  /doFail:
+    get:
+      operationId: doFail
+      description: Will always fail
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: string
+        default:
+          description: Unexpected error
+          schema:
+            type: string

@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: meetmon
+  namespace: {{ NAMESPACE }}
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+  revisionHistoryLimit: 5
+  selector:
+      matchLabels:
+        name: meetmon
+  template:
+    metadata:
+      labels:
+        name: meetmon
+        date: "{{ DATE }}"
+    spec:
+      containers:
+      - name: meetmon
+        image: {{ PUBLISH_TAG }}
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 2
+          timeoutSeconds: 1
+          failureThreshold: 1
+          successThreshold: 1
+      # - name: esp
+      #   image: meetup/endpoints-runtime:1-0.0.1
+      #   imagePullPolicy: Always
+      #   args: [
+      #     "-p", "8081",
+      #     "-a", "127.0.0.1:8080",
+      #     "-s", "meetmon-{{ NAMESPACE }}.endpoints.{{ PROJECT }}.cloud.goog",
+      #     "-v", "{{ ENDPOINT_REVISION }}",
+      #   ]
